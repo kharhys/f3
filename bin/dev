@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+const pretty = require('pretty-error')
 const once = require('ramda').once
 const webpack = require('webpack')
 const nodemon = require('nodemon')
@@ -7,39 +8,46 @@ const fs = require('fs')
 
 process.on('SIGINT', process.exit)
 
-const defaultConfig = require( '../config/backpack.config' )
-const paths = require( '../config/paths' )
+try {
 
-const options = {
-  env: 'development'
+	const defaultConfig = require( '../config/backpack.config' )
+	const paths = require( '../config/paths' )
+
+	const options = {
+	  env: 'development'
+	}
+
+	const configPath = path.resolve('f3.config.js')
+	let userConfig = {}
+
+	if (fs.existsSync(configPath)) {
+	  const userConfigModule = require(configPath)
+	  userConfig = userConfigModule.default || userConfigModule
+	}
+
+	const serverConfig = userConfig.webpack
+	      ? userConfig.webpack(defaultConfig(options), options, webpack)
+	      : defaultConfig(options)
+
+
+	  console.log('userConfig.webpack', userConfig.webpack)
+
+	const serverCompiler = webpack(serverConfig)
+
+	const startServer = () => {
+	  const serverPaths = Object.keys(serverCompiler.options.entry)
+	    .map(entry => path.join(serverCompiler.options.output.path, `${entry}.js`))
+	  nodemon({ script: serverPaths[0], watch: serverPaths, nodeArgs: process.argv.slice(2) })
+	    .on('quit', process.exit)
+	}
+
+	const startServerOnce = once((err, stats) => {
+	  if (err) return
+	  startServer()
+	})
+	serverCompiler.watch(serverConfig.watchOptions || {}, startServerOnce)
+
+} catch(err) {
+	const pe = new pretty()
+	console.log(pe.render(err))
 }
-
-const configPath = path.resolve('f3.config.js')
-let userConfig = {}
-
-if (fs.existsSync(configPath)) {
-  const userConfigModule = require(configPath)
-  userConfig = userConfigModule.default || userConfigModule
-}
-
-const serverConfig = userConfig.webpack
-      ? userConfig.webpack(defaultConfig(options), options, webpack)
-      : defaultConfig(options)
-
-
-  console.log('userConfig.webpack', userConfig.webpack)
-
-const serverCompiler = webpack(serverConfig)
-
-const startServer = () => {
-  const serverPaths = Object.keys(serverCompiler.options.entry)
-    .map(entry => path.join(serverCompiler.options.output.path, `${entry}.js`))
-  nodemon({ script: serverPaths[0], watch: serverPaths, nodeArgs: process.argv.slice(2) })
-    .on('quit', process.exit)
-}
-
-const startServerOnce = once((err, stats) => {
-  if (err) return
-  startServer()
-})
-serverCompiler.watch(serverConfig.watchOptions || {}, startServerOnce)
