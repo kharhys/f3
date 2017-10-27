@@ -30,7 +30,6 @@
     "git-push": "git add . && git commit -m 'General Update' && git push -u origin master"
   },
   "dependencies": {
-    "feathers": "^2.2.0",
     "f3": "git+https://github.com/kharhys/f3.git"
   },
   "devDependencies": { 
