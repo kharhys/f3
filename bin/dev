@@ -7,8 +7,6 @@ const fs = require('fs')
 
 process.on('SIGINT', process.exit)
 
-console.log('__dirname', __dirname, path.join(__dirname, '../config/backpack.config') )
-
 const defaultConfig = require( '../config/backpack.config' )
 const paths = require( '../config/paths' )
 
@@ -30,7 +28,7 @@ const serverConfig = userConfig.webpack
 
 
   console.log('userConfig.webpack', userConfig.webpack)
-  
+
 const serverCompiler = webpack(serverConfig)
 
 const startServer = () => {
