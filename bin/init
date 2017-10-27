@@ -12,6 +12,7 @@ const targetPath = path.resolve(
 		path.join(__dirname, '../dist/app')
 	)
 
+console.log('__dirname', __dirname, process)
 
 const spinner = ora()
 sao.on('download:start', () => {
