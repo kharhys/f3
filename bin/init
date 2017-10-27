@@ -9,7 +9,7 @@ const template = path.resolve(
 	)
 
 const targetPath = path.resolve(
-		path.join(process.cwd(), '../dist/app')
+		path.join(process.cwd(), process.argv)
 	)
 
 console.log('__dirname', __dirname, process.cwd())
