@@ -21,7 +21,7 @@ let userConfig = {}
 
 if (fs.existsSync(configPath)) {
   const userConfigModule = require(configPath)
-  console.log('userConfigModule', userConfigModule, defaultConfig)
+  console.log('userConfigModule', userConfigModule, paths, defaultConfig)
   userConfig = userConfigModule.default || userConfigModule
 }
 
