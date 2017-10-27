@@ -21,7 +21,7 @@ module.exports = function (options) {
   if (hasBabelRc) {
     console.log('> Using .babelrc defined in your app root')
   } else {
-    mainBabelOptions.presets.push(require.resolve('../babel'))
+    mainBabelOptions.presets.push(babelPreset)
   }
 
   return {
