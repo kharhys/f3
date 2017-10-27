@@ -19,10 +19,9 @@ const options = {
 const configPath = path.resolve('f3.config.js')
 let userConfig = {}
 
-console.log('userConfigModule', userConfigModule, defaultConfig)
-
 if (fs.existsSync(configPath)) {
   const userConfigModule = require(configPath)
+  console.log('userConfigModule', userConfigModule, defaultConfig)
   userConfig = userConfigModule.default || userConfigModule
 }
 
