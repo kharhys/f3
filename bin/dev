@@ -22,14 +22,15 @@ let userConfig = {}
 if (fs.existsSync(configPath)) {
   const userConfigModule = require(configPath)
   userConfig = userConfigModule.default || userConfigModule
-  console.log('userConfigModule', userConfig)
 }
 
-const serverConfig = userConfig.backpack && userConfig.backpack.webpack
-      ? userConfig.backpack.webpack(defaultConfig(options), options, webpack)
+const serverConfig = userConfig.webpack
+      ? userConfig.webpack(defaultConfig(options), options, webpack)
       : defaultConfig(options)
 
 
+  console.log('userConfig.webpack', userConfig.webpack)
+  
 const serverCompiler = webpack(serverConfig)
 
 const startServer = () => {
