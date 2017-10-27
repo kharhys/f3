@@ -9,8 +9,8 @@ process.on('SIGINT', process.exit)
 
 console.log('__dirname', __dirname, path.join(__dirname, '../config/backpack.config') )
 
-const defaultConfig = require( path.join(__dirname, '../config/backpack.config') )
-const paths = require( path.resolve( path.join(__dirname, '../config/paths') ) )
+const defaultConfig = require( '../config/backpack.config' )
+const paths = require( '../config/paths' )
 
 const options = {
   env: 'development'
@@ -25,7 +25,7 @@ if (fs.existsSync(configPath)) {
   userConfig = userConfigModule.default || userConfigModule
 }
 
-const serverConfig = userConfig.backpack.webpack
+const serverConfig = userConfig.backpack && userConfig.backpack.webpack
       ? userConfig.backpack.webpack(defaultConfig(options), options, webpack)
       : defaultConfig(options)
 

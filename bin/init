@@ -9,7 +9,7 @@ const template = path.resolve(
 	)
 
 const targetPath = path.resolve(
-		path.join(process.cwd(), process.argv[2])
+		process.argv[2] ? path.join(process.cwd(), process.argv[2]) : process.cwd()
 	)
 
 console.log('__dirname', __dirname, process.argv)
