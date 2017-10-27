@@ -9,10 +9,10 @@ const template = path.resolve(
 	)
 
 const targetPath = path.resolve(
-		path.join(process.cwd(), process.argv)
+		path.join(process.cwd(), process.cwd())
 	)
 
-console.log('__dirname', __dirname, process.cwd())
+console.log('__dirname', __dirname, process.argv)
 
 const spinner = ora()
 sao.on('download:start', () => {
