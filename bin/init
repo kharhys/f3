@@ -12,8 +12,6 @@ const targetPath = path.resolve(
 		process.argv[2] ? path.join(process.cwd(), process.argv[2]) : process.cwd()
 	)
 
-console.log('__dirname', __dirname, process.argv)
-
 const spinner = ora()
 sao.on('download:start', () => {
 	spinner.text = 'Downloading Dependencies..'

@@ -1,10 +1,11 @@
 const fs = require('fs')
+const path = require('path')
 const webpack = require('webpack')
+const babelPreset = require('babel-preset-backpack')
 const nodeExternals = require('webpack-node-externals')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+
 const config = require('./paths')
-const path = require('path')
-const babelPreset = require('../babel')
 
 // This is the Webpack configuration.
 // It is focused on developer experience and fast rebuilds.
