@@ -7,7 +7,7 @@ const pkg = require('../package.json')
 
 const log = require('console-emoji')
 
-const defaultCommand = 'build'
+const defaultCommand = 'dev'
 const commands = new Set([
 	'init', 'build', 'start', defaultCommand
 ])
