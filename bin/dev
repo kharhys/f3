@@ -7,7 +7,7 @@ const fs = require('fs')
 
 process.on('SIGINT', process.exit)
 
-const defaultConfig = require('../config/backback.config')
+const defaultConfig = require('../config/backpack.config')
 const paths = require('../config/paths')
 
 const options = {
