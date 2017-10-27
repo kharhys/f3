@@ -5,14 +5,14 @@ const path = require('path')
 const pretty = require('pretty-error')
 
 const template = path.resolve(
-		path.join(__dirname, '../templates/app')
+		path.join(process.cwd(), '../templates/app')
 	)
 
 const targetPath = path.resolve(
-		path.join(__dirname, '../dist/app')
+		path.join(process.cwd(), '../dist/app')
 	)
 
-console.log('__dirname', __dirname, process)
+console.log('__dirname', __dirname, process.cwd())
 
 const spinner = ora()
 sao.on('download:start', () => {
