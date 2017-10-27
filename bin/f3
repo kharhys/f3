@@ -1,0 +1,58 @@
+#!/usr/bin/env node
+const path = require('path')
+const chalk = require('chalk')
+const spawn = require('cross-spawn')
+const pretty = require('pretty-error')
+const pkg = require('../package.json')
+
+const log = require('console-emoji')
+
+const defaultCommand = 'build'
+const commands = new Set([
+	'init', 'build', 'start', defaultCommand
+])
+
+let cmd = process.argv[2]
+let args
+
+if (new Set(['--version', '-v']).has(cmd)) {
+	console.log(`f3 v ${pkg.version}`)
+	process.exit(0)
+}
+
+if(new Set(['--help', '-h']).has(cmd)) {
+	log(`
+:sparkles: :dizzy: ${chalk.yellow(' fullstack feathers framework ')} :hammer:
+
+	:star: ${chalk.white(' Usage ')}
+		${chalk.white('$ f3 <command>')}
+
+	:scroll: ${chalk.white(' Avalable commands')}
+		${chalk.cyan(Array.from(commands).join(' '))}
+
+	${chalk.gray(':spiral_note_pad: For more information run a command with the --help flag')}
+	`)
+	process.exit(0)
+}
+
+if (commands.has(cmd)) {
+	args = process.argv.slice(3)
+} else {
+	cmd = defaultCommand
+	args = process.argv.slice(2)
+}
+
+const bin = path.resolve(path.join(__dirname, cmd))
+
+const startProcess = () => {
+	const proc = spawn(bin, args, { stdio: 'inherit' })
+	proc.on('close', (code) => process.exit(code))
+	proc.on('error', (err) => {
+		pe = new pretty()
+		console.error(pe.render(err))
+		process.exit(1)
+	})
+	return proc
+}
+
+const proc = startProcess()
