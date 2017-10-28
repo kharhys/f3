@@ -3,12 +3,10 @@ email = require '~/services/email/email.service'
 roles = require '~/services/roles/roles.service'
 message = require '~/services/message/message.service'
 settings = require '~/services/settings/settings.service'
-subscribers = require '~/services/subscribers/subscribers.service'
 auth = require '~/services/auth-management/auth-management.service'
 
 module.exports = ->
   app = this
-  app.configure subscribers
   app.configure auth
   app.configure users
   app.configure settings

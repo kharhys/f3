@@ -51,12 +51,8 @@
 </template>
 <script lang="livescript">
 
-require! '~/components/subscribe/selectcountry.vue'
-
 module.exports =
-  methods:
-    updateCountryCode: (country) ->
-        console.log('selectcountry', this)
+  methods: 
     handleSubmit: (name) ->
       ctx = this
       @$refs[name].validate ((valid) ->
@@ -115,8 +111,6 @@ module.exports =
         message: 'Password confirmation is required'
         trigger: 'blur'
       }]
-  components:
-    SelectCountry: selectcountry.default
 </script>
 <style lang="stylus">
 #signup_comp

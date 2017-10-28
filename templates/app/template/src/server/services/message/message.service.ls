@@ -2,7 +2,7 @@ createService = require 'feathers-mongoose'
 
 createModel = require '../../models/message.model'
 filters = require './message.filters'
-hooks = require './message.hooks'
+hooks = (require './message.hooks').default
 
 module.exports = ->
   app = this

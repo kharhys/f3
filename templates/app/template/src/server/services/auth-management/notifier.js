@@ -4,7 +4,7 @@ const path = require('path')
 const returnEmail = process.env.COMPLAINT_EMAIL
 const pug = require('pug')
 
-exports default function(app) {
+export default function(app) {
 
 
   const returnEmail = app.get('complaint_email') || process.env.COMPLAINT_EMAIL || 'support@tendapa.co.ke'

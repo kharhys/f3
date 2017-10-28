@@ -37,8 +37,6 @@
 
 module.exports =
   methods:
-    updateCountryCode: (country) ->
-        console.log('selectcountry', this)
     handleSubmit: (name) ->
       ctx = this
       @$refs[name].validate ((valid) ->

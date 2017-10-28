@@ -3,17 +3,13 @@ Menu#header-menu(mode='horizontal', theme='dark', active-name='1')
   nuxt-link#header-logo(to='/')
   #header-nav
     MenuItem(name='2')
-       OpenStore
+       f3
     MenuItem(name='1')
       Button#hiw(type='text', v-scroll-to="'#howitworks'")
         | How it works
 </template>
 
-<script scoped lang="livescript">
-require! '~/components/layout/openstore.vue'
-module.exports =
-  components:
-    OpenStore: openstore.default
+<script scoped lang="livescript">  
 </script>
 
 <style lang="stylus">

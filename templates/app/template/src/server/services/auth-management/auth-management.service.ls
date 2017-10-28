@@ -1,7 +1,7 @@
 authManagement = require 'feathers-authentication-management'
 
 hooks = require './auth-management.hooks'
-notifier = require './notifier'
+notifier = (require './notifier').default
 
 module.exports = ->
   app = this
