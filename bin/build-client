@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+
 process.env.DEBUG = process.env.DEBUG || 'f3:*'
 
 const { Nuxt, Builder, Generator } = require('nuxt')
@@ -10,66 +11,79 @@ const fs = require('fs')
 const debug = require('debug')('f3:build-client')
 
 const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    h: 'help',
-    c: 'config-file',
-    a: 'analyze',
-    s: 'spa',
-    u: 'universal'
-  },
-  boolean: ['h', 'a', 's', 'u'],
-  string: ['c'],
-  default: {
-    c: 'f3.config.js'
-  }
+    alias: {
+        h: 'help',
+        c: 'config-file',
+        a: 'analyze',
+        s: 'spa',
+        u: 'universal'
+    },
+    boolean: ['h', 'a', 's', 'u'],
+    string: ['c'],
+    default: {
+        c: 'f3.config.js'
+    }
 })
 
 const rootDir = process.cwd()
-const configPath = resolve('f3.config.js') 
+const configPath = resolve('f3.config.js')
 
 if (fs.existsSync(configPath)) {
 
-  const userConfigModule = require(configPath)
-  const userConfig = userConfigModule.default || userConfigModule
+    const userConfigModule = require(configPath)
+    const userConfig = userConfigModule.default || userConfigModule
 
-  const options = userConfig.nuxt
+    const options = userConfig.nuxt
 
-  // Ensure production build 
-  options.dev = false
+    // Ensure production build 
+    options.dev = false
 
-  // Analyze option
-  options.build = options.build || {}
-  if (argv.analyze) options.build.analyze = true
+    // Analyze option
+    options.build = options.build || {}
+    if (argv.analyze) options.build.analyze = true
 
-  if (typeof options.rootDir !== 'string') options.rootDir = rootDir 
+    if (typeof options.rootDir !== 'string') options.rootDir = rootDir
 
 
-  debug('build-client initiated')
+    debug('build-client initiated')
 
-  const nuxt = new Nuxt(options)
-  const builder = new Builder(nuxt)
+    const nuxt = new Nuxt(options)
+    const builder = new Builder(nuxt)
 
-  // Disable minify to get exact results of nuxt start
-  nuxt.options.generate.minify = false
 
-  // Generate on spa mode - every route as a HTML file for static hosting
-  try {
-  	new Generator(nuxt, builder).generate({ build: true })
-	  	.then(() => {
-	      console.log(`✓ You can now directly upload ${nuxt.options.generate.dir}/ or start server using "npm run start"`)
-	  	})
-	  	.catch(err => {
-	  		const pe = new pretty()
-	  		console.error(pe.render(err))
-	  	})
-	} catch(err) {	  	
-		const pe = new pretty()
-		console.error(pe.render(err))
-  }
+
+    if (options.mode !== 'spa') {
+        // Build for SSR app
+        builder.build()
+            .then(() => debug('Building done'))
+            .catch((err) => {
+                console.error(err) // eslint-disable-line no-console
+                process.exit(1)
+            })
+    } else {
+
+        // Disable minify to get exact results of nuxt start
+        nuxt.options.generate.minify = false
+
+        // Generate on spa mode - every route as a HTML file for static hosting
+        try {
+            new Generator(nuxt, builder).generate({ build: true })
+                .then(() => {
+                    console.log(`✓ You can now directly upload ${nuxt.options.generate.dir}/ or start server using "npm run start"`)
+                })
+                .catch(err => {
+                    const pe = new pretty()
+                    console.error(pe.render(err))
+                })
+        } catch (err) {
+            const pe = new pretty()
+            console.error(pe.render(err))
+        }
+    }
 
 
 
 } else {
-	debug('could not load config file') 
-	process.exit(1)
+    debug('could not load config file')
+    process.exit(1)
 }

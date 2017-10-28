@@ -20,8 +20,8 @@ if (fs.existsSync(configPath)) {
   userConfig = userConfigModule.default || userConfigModule
 }
 
-const serverConfig = userConfig.backpack.webpack
-      ? userConfig.backpack.webpack(defaultConfig(options), options, webpack)
+const serverConfig = userConfig.backpack
+      ? userConfig.backpack(defaultConfig(options), options, webpack)
       : defaultConfig(options)
 
 
