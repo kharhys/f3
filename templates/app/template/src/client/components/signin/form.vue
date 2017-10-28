@@ -144,7 +144,6 @@ module.exports =
     height 4rem
     margin 1rem auto
     background-repeat no-repeat !important
-    background url('~assets/img/tendapa_logo_teal.svg')
 #country_code
     padding .5rem auto
 #signin_comp

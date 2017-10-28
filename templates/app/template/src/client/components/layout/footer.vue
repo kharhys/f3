@@ -1,7 +1,7 @@
 <template lang="pug">
 footer.flex-c
   .copyleft
-    | Tendapa © {{ new Date().getFullYear() }}
+    | f3 © {{ new Date().getFullYear() }}
   .copyright
     | all rights reserved
     // all lefts reversed

@@ -40,7 +40,6 @@ module.exports =
     margin-left 2rem
     position relative
     background-repeat no-repeat !important
-    background url('~assets/img/tendapa_logo_white.svg')
 .ivu-menu-horizontal .ivu-menu-item,
 .ivu-menu-horizontal .ivu-menu-submenu
     padding 0 .5rem
