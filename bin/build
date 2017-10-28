@@ -1,37 +1,22 @@
 #! /usr/bin/env node
+const runAll = require("npm-run-all")
 const pretty = require('pretty-error')
-const webpack = require('webpack')
-const path = require('path')
-const fs = require('fs')
 
-const defaultConfig = require('../config/backpack.config')
+process.env.NODE_ENV = 'production'
 
-process.on('SIGINT', process.exit)
-
-const options = {
-  env: 'production'
-}
-
-const configPath = path.resolve('backpack.config.js')
-let userConfig = {}
-
-if (fs.existsSync(configPath)) {
-  const userConfigModule = require(configPath)
-  console.log('userConfigModule', userConfigModule)
-  userConfig = userConfigModule.default || userConfigModule
-}
-
-const serverConfig = userConfig.backpack.webpack
-      ? userConfig.backpack.webpack(defaultConfig(options), options, webpack)
-      : defaultConfig(options)
-
-
-const serverCompiler = webpack(serverConfig)
-
-serverCompiler.run((error, stats) => {
-  if (error || stats.hasErrors()) {
-  	const pe = new pretty()
-  	console.error('serverCompiler error', pe.render(error || stats.hasErrors()))
-    process.exitCode = 1;
-  }
+build = runAll(["build:*"], {
+	parallel: true
+	stdin: process.stdin,
+	stdout: process.stdout,
+	stderr: process.stderr
 })
+
+
+build
+	.then(() => {
+	    console.log("done!");
+	})
+	.catch(err => {
+		const pe = new pretty()
+	    console.error(pe.render(err));
+	});

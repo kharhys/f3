@@ -30,8 +30,6 @@ try {
 	      : defaultConfig(options)
 
 
-	  console.log('userConfig.webpack', userConfig.webpack)
-
 	const serverCompiler = webpack(serverConfig)
 
 	const startServer = () => {

@@ -1,0 +1,36 @@
+#! /usr/bin/env node
+const pretty = require('pretty-error')
+const webpack = require('webpack')
+const path = require('path')
+const fs = require('fs')
+
+const defaultConfig = require('../config/backpack.config')
+
+process.on('SIGINT', process.exit)
+
+const options = {
+  env: 'production'
+}
+
+const configPath = path.resolve('backpack.config.js')
+let userConfig = {}
+
+if (fs.existsSync(configPath)) {
+  const userConfigModule = require(configPath)
+  userConfig = userConfigModule.default || userConfigModule
+}
+
+const serverConfig = userConfig.backpack.webpack
+      ? userConfig.backpack.webpack(defaultConfig(options), options, webpack)
+      : defaultConfig(options)
+
+
+const serverCompiler = webpack(serverConfig)
+
+serverCompiler.run((error, stats) => {
+  if (error || stats.hasErrors()) {
+  	const pe = new pretty()
+  	console.error('serverCompiler error', pe.render(error || stats.hasErrors()))
+    process.exitCode = 1;
+  }
+})

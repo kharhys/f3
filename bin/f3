@@ -9,7 +9,12 @@ const log = require('console-emoji')
 
 const defaultCommand = 'dev'
 const commands = new Set([
-	'init', 'build', 'start', defaultCommand
+	'init', 
+	defaultCommand,
+	'start', 
+	'build', 
+	'build-client', 
+	'build-server'
 ])
 
 let cmd = process.argv[2]
