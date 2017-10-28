@@ -1,7 +1,7 @@
 const rolesData = require('~/roles')
 const settingsData = require('~/settings')
 
-module.exports = function () {
+export default function () {
   const app = this
 
   ifEmptyCreate = ifEmptyCreate.bind(this)

@@ -2,7 +2,7 @@ const verifyHooks = require('feathers-authentication-management').hooks
 const { setCreatedAt, setUpdatedAt } = require('feathers-hooks-common')
 const sendVerificationEmail = require('~/hooks/send-verification-email')
 
-module.exports = {
+export default {
   before: {
     all: [],
     find: [

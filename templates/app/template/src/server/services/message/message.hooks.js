@@ -5,7 +5,7 @@ const isEnabled = require('~/hooks/is-enabled')
 const ownerOrPermission = require('~/hooks/owner-or-permission')
 const associateCurrentUser = require('~/hooks/associate-current-user')
 
-module.exports = {
+export default {
   before: {
     all: [],
     find: [

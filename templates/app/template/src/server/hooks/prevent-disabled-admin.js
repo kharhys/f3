@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const errors = require('feathers-errors')
 
-module.exports = options => async hook => {
+export default options => async hook => {
   if (!hook.params.provider) { return hook; }
 
   if(hook.data.isEnabled === false) {

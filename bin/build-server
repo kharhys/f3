@@ -21,9 +21,8 @@ if (fs.existsSync(configPath)) {
 }
 
 const serverConfig = userConfig.backpack
-      ? userConfig.backpack(defaultConfig(options), options, webpack)
-      : defaultConfig(options)
-
+    ? userConfig.backpack(defaultConfig(options), options, webpack)
+    : defaultConfig(options)
 
 const serverCompiler = webpack(serverConfig)
 

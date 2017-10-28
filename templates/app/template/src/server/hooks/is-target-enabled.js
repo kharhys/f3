@@ -4,7 +4,7 @@
 const errors = require('feathers-errors');
 const _ = require('lodash')
 
-module.exports = (options = {}) => { // eslint-disable-line no-unused-vars
+export default (options = {}) => { // eslint-disable-line no-unused-vars
   return async hook => {
 
     let defaults = {
