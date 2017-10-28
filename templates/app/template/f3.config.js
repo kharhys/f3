@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  webpack: (config, options, webpack) => {
+  backpack: (config, options, webpack) => {
     // server main file
     config.entry.main = path.resolve(__dirname, 'src', 'server', 'index.ls')
     config.output.path = path.resolve(__dirname, 'dist', 'server')
