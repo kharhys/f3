@@ -131,5 +131,5 @@ var invoke = function(env) {
 };
 
 cli.launch({
-  configPath: options.flightplan
+  configPath: options.flightplan ? options.flightplan : resolve(`deploy/${target}.flightplan`)
 }, invoke);

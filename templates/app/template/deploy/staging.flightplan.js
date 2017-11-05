@@ -5,8 +5,10 @@ var path = require('path');
 var fs = require('fs');
 var pretty = require('pretty-error')
 
+require('dotenv').config({path: path.resolve('config/.env')})
 
-console.log('flightplan on it')
+
+console.log('flightplan on it', process.env.PASSPHRASE)
 
 // configuration
 plan.target('staging', {
@@ -56,6 +58,10 @@ plan.remote(function(host) {
                 	host.exec('pod create tendapa')
                 } catch (err) {
 	                host.log('app already exists')
+
+	                // host.exec('apt-get update')
+	                // host.exec('apt-get install nginx')
+
 	                return
 	            }
 

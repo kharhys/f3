@@ -15,6 +15,7 @@
     "build": "f3 build",
     "build:server": "f3 build-server",
     "build:client": "f3 build-client",
+    "deploy:staging": "f3 deploy staging",
     "now-start": "node ./dist/server/main.js",
     "start": "cross-env NODE_ENV=production node ./dist/server/main.js",
     "start-app": "pm2 start ./dist/server/main.js -i max",

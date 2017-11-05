@@ -18,6 +18,7 @@
     "console-emoji": "0.0.2",
     "cross-spawn": "^5.1.0",
     "debug": "^3.1.0",
+    "dotenv": "^4.0.0",
     "flightplan": "^0.6.17",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "interpret": "^1.0.4",
