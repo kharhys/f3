@@ -1,7 +1,7 @@
 import decode from 'jwt-decode'
 import { sync } from 'vuex-router-sync'
 
-import { initAuth } from '~api/utils/auth'
+import { initAuth } from '~api/auth/utils'
 
 export const actions = {
   async nuxtServerInit (store, ctx) {

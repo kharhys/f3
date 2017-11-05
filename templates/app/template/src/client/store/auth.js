@@ -1,4 +1,4 @@
-import { state, actions, mutations } from '~api/vuex/auth'
+import { state, actions, mutations } from '~api/auth'
 
 export const state = state
 export const actions = actions
