@@ -14,7 +14,8 @@ const commands = new Set([
 	'start', 
 	'build', 
 	'build-client', 
-	'build-server'
+	'build-server',
+	'deploy'
 ])
 
 let cmd = process.argv[2]
