@@ -3,10 +3,9 @@ const pretty = require('pretty-error')
 const webpack = require('webpack')
 const path = require('path')
 const fs = require('fs')
+const sh = require('shelljs')
 
-const sb = require('storyboard')
-
-const { mainStory, chalk } = sb
+import { mainStory, chalk } from 'storyboard'
 
 const defaultConfig = require('../config/backpack.config')
 
@@ -19,9 +18,6 @@ const options = {
 const configPath = path.resolve('f3.config.js')
 let userConfig = {}
 
-console.log('using config path ', configPath)
-mainStory.info('using config path ', configPath)
-
 if (fs.existsSync(configPath)) {
   const userConfigModule = require(configPath)
   userConfig = userConfigModule.default || userConfigModule
@@ -30,6 +26,9 @@ if (fs.existsSync(configPath)) {
 const serverConfig = userConfig.backpack
     ? userConfig.backpack(defaultConfig(options), options, webpack)
     : defaultConfig(options)
+
+console.log('loaded config file ', serverConfig)
+mainStory.info('loaded config file ', configPath)
 
 const serverCompiler = webpack(serverConfig)
 
