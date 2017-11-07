@@ -4,6 +4,10 @@ const webpack = require('webpack')
 const path = require('path')
 const fs = require('fs')
 
+const sb = require('storyboard')
+
+const { mainStory, chalk } = sb
+
 const defaultConfig = require('../config/backpack.config')
 
 process.on('SIGINT', process.exit)
@@ -12,8 +16,11 @@ const options = {
   env: 'production'
 }
 
-const configPath = path.resolve('backpack.config.js')
+const configPath = path.resolve('f3.config.js')
 let userConfig = {}
+
+console.log('using config path ', configPath)
+mainStory.info('using config path ', configPath)
 
 if (fs.existsSync(configPath)) {
   const userConfigModule = require(configPath)
@@ -29,7 +36,8 @@ const serverCompiler = webpack(serverConfig)
 serverCompiler.run((error, stats) => {
   if (error || stats.hasErrors()) {
   	const pe = new pretty()
-  	console.error('serverCompiler error', pe.render(error || stats.hasErrors()))
+    console.error('serverCompiler error')
+    console.error(pe.render(error))
     process.exitCode = 1;
   }
 })
