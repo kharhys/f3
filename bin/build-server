@@ -28,6 +28,7 @@ const serverConfig = userConfig.backpack
     ? userConfig.backpack(defaultConfig(options), options, webpack)
     : defaultConfig(options)
 
+sh.exec(`rm -rf ${serverConfig.output.path}`)
 console.log('loaded config file ', serverConfig)
 mainStory.info('loaded config file ', configPath)
 
