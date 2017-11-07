@@ -38,8 +38,10 @@
     "source-map-support": "^0.5.0",
     "superb": "^2.0.0",
     "user-home": "^2.0.0",
+    "usey": "^1.7.0",
     "v8flags": "^3.0.1",
     "webpack": "^3.8.1",
-    "webpack-node-externals": "^1.6.0"
+    "webpack-node-externals": "^1.6.0",
+    "yargs": "^10.0.3"
   }
 }
