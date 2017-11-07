@@ -5,7 +5,7 @@ const pretty = require('pretty-error')
 process.env.NODE_ENV = 'production'
 
 build = runAll(["build:*"], {
-	parallel: true,
+	parallel: false,
 	stdin: process.stdin,
 	stdout: process.stdout,
 	stderr: process.stderr
