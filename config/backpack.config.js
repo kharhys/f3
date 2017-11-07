@@ -5,7 +5,6 @@ const babelPreset = require('babel-preset-backpack')
 const nodeExternals = require('webpack-node-externals')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 
-const path = require('path')
 const rootPath = path.resolve(process.cwd())
 const buildPath = path.join(rootPath, 'build')
 const publicBuildPath = path.join(buildPath, 'public')
