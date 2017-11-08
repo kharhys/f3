@@ -11,7 +11,7 @@ require('dotenv').config({
 
 const argv = require('yargs').argv
 
-const configPath = path.resolve(__dirname)
+const configPath = path.resolve('f3.config.js', '..')
 
 console.log('flightplan on it', configPath)
 
