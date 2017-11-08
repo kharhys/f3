@@ -11,7 +11,9 @@ require('dotenv').config({
 
 const argv = require('yargs').argv
 
-console.log('flightplan on it', argv.passphrase)
+const configPath = path.resolve(__dirname)
+
+console.log('flightplan on it', configPath)
 
 // configuration
 plan.target('staging', {
@@ -231,7 +233,7 @@ plan.remote(function(host) {
 
 var hostconfig = `
 Host  staging
-    Hostname 165.227.178.113
+    Hostname ${argv.host}
     IdentityFile ~/.ssh/id_rsa
     User root
 `;
@@ -244,7 +246,7 @@ plan.local(function(host) {
         host.exec('git status')
         console.log('gitstatus ')
     } catch (err) {
-        console.log('git init? ')
+        console.log('git init? ', configPath)
     }
 
     // let sshconfigfile = path.join(userHome, '/.ssh/config')
