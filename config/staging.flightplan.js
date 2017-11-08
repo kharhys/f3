@@ -20,23 +20,13 @@ plan.target('staging', {
     passphrase: argv.passphrase,
     agent: process.env.SSH_AUTH_SOCK,
     privateKey: path.join(userHome, '/.ssh/id_rsa')
-});
-
-// plan.target('production', [{
-//     host: 'www1.tendapa.com',
-//     username: 'pstadler',
-//     agent: process.env.SSH_AUTH_SOCK
-// }, {
-//     host: 'www2.tendapa.com',
-//     username: 'pstadler',
-//     agent: process.env.SSH_AUTH_SOCK
-// }]);
+})
 
 var tmpDir = 'tendapa-com-' + new Date().getTime()
 
 function stashAppPod(host, ctx, next) {    
     const res = host.exec('[ -d /root/repos/tendapa.git ] && echo "exists" || echo "notfound"')
-    ctx.app.exists = res.stdout.replace(/\r?\n|\r/g,"") === "exists" && res.code == "0" ? true : false
+    ctx.app.exists = res.code == "0" && res.stdout.replace(/\r?\n|\r/g,"") === "exists" ? true : false
     return next()
 }
 
@@ -176,17 +166,17 @@ const run = (host, ctx) => {
     var Usey = require('usey')
     var app = Usey()
 
-    // app.use(stashNode)
-    // app.use(ensureNode)
+    app.use(stashNode)
+    app.use(ensureNode)
 
-    // app.use(stashYarnModule)
-    // app.use(ensureYarnModule)
+    app.use(stashYarnModule)
+    app.use(ensureYarnModule)
 
-    // app.use(stashPodModule)
-    // app.use(ensurePodModule)
+    app.use(stashPodModule)
+    app.use(ensurePodModule)
 
-    // app.use(stashNginx)
-    // app.use(ensureNginx)
+    app.use(stashNginx)
+    app.use(ensureNginx)
 
     app.use(stashAppPod)
 
