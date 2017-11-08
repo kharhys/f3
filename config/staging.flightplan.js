@@ -15,8 +15,8 @@ console.log('flightplan on it', argv.passphrase)
 
 // configuration
 plan.target('staging', {
-    username: 'root',
-    host: '165.227.178.113',
+    host: argv.host,
+    username: argv.username,
     passphrase: argv.passphrase,
     agent: process.env.SSH_AUTH_SOCK,
     privateKey: path.join(userHome, '/.ssh/id_rsa')
