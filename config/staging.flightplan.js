@@ -239,8 +239,13 @@ Host  staging
 plan.local(function(host) {
     host.log('remote tasks completed successfully')
 
-    const gitstatus = host.exec('git status')
-    console.log('gitstatus >>', gitstatus)
+    try {
+        host.exec('pwd')
+        host.exec('git status')
+        console.log('gitstatus ')
+    } catch (err) {
+        console.log('git init? ')
+    }
 
     // let sshconfigfile = path.join(userHome, '/.ssh/config')
     // if (!fs.existsSync(sshconfigfile)) {
