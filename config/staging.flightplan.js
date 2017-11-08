@@ -24,12 +24,6 @@ plan.target('staging', {
 
 var tmpDir = 'tendapa-com-' + new Date().getTime()
 
-function stashAppPod(host, ctx, next) {    
-    const res = host.exec('[ -d /root/repos/tendapa.git ] && echo "exists" || echo "notfound"')
-    ctx.app.exists = res.code == "0" && res.stdout.replace(/\r?\n|\r/g,"") === "exists" ? true : false
-    return next()
-}
-
 function ensureRuntimeDeps(host) {
     let context = {
         step: 0,
@@ -42,9 +36,32 @@ function ensureRuntimeDeps(host) {
     run(host, context)
 }
 
-function stashNode(host, ctx, next) {
+function stashAppPod(host, ctx, next) {   
+    console.log(`step ${ctx.step}: stashAppPod`)
+    ctx.step += 1 
+    const res = host.exec('[ -d /root/repos/tendapa.git ] && echo "exists" || echo "notfound"')
+    ctx.app.exists = res.code == "0" && res.stdout.replace(/\r?\n|\r/g,"") === "exists" ? true : false
+    return next()
+}
+
+function ensureAppPod(host, ctx, next) {
+    console.log(`step ${ctx.step}: ensureAppPod`)
     ctx.step += 1
-    console.log('step 1: Ensure node and npm')
+    if ( !ctx.app.exists ) {
+        try { 
+            host.log('Done ensure ensureAppPod');
+            ctx.app.installed = true
+        } catch (err) { 
+            ctx.app.installed = false
+            return next(err)
+        }
+    }
+    return next()
+}
+
+function stashNode(host, ctx, next) {
+    console.log(`step ${ctx.step}: stashNode`)
+    ctx.step += 1
     try {
         host.exec('node -v')
         ctx.node.exists = true
@@ -56,6 +73,7 @@ function stashNode(host, ctx, next) {
 }
 
 function ensureNode(host, ctx, next) {
+    console.log(`step ${ctx.step}: ensureNode`)
     ctx.step += 1
     if ( !ctx.node.exists ) {
         try {
@@ -73,8 +91,8 @@ function ensureNode(host, ctx, next) {
 }
 
 function stashYarnModule(host, ctx, next) {
+    console.log(`step ${ctx.step}: stashYarnModule`)
     ctx.step += 1
-    console.log('step 2: Ensure yarn npm moduld')
     try {
         host.exec('yarn -v')
         ctx.yarn.exists = true
@@ -179,6 +197,7 @@ const run = (host, ctx) => {
     app.use(ensureNginx)
 
     app.use(stashAppPod)
+    app.use(ensureAppPod)
 
     app.use(function (host, ctx, next) {
         console.log('======alll done======')
@@ -220,11 +239,14 @@ Host  staging
 plan.local(function(host) {
     host.log('remote tasks completed successfully')
 
-    let sshconfigfile = path.join(userHome, '/.ssh/config')
-    if (!fs.existsSync(sshconfigfile)) {
-        host.exec(`touch ${sshconfigfile}`)
-        console.log('fs.existsSync', fs.existsSync(sshconfigfile))
-    }
+    const gitstatus = host.exec('git status')
+    console.log('gitstatus >>', gitstatus)
+
+    // let sshconfigfile = path.join(userHome, '/.ssh/config')
+    // if (!fs.existsSync(sshconfigfile)) {
+    //     host.exec(`touch ${sshconfigfile}`)
+    //     console.log('fs.existsSync', fs.existsSync(sshconfigfile))
+    // }
 
     // fs.appendFileSync(sshconfigfile, hostconfig)
 })
