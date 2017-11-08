@@ -13,7 +13,7 @@ const argv = require('yargs').argv
 
 const configPath = path.resolve('.')
 
-console.log('flightplan on it', configPath)
+console.log('flightplan on it', argv)
 
 // configuration
 plan.target('staging', {
