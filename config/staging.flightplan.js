@@ -33,6 +33,7 @@ function ensureRuntimeDeps(host) {
         yarn: {},
         pod: {},
         nginx: {},
+        mongo: {},
         app: {}
     }
     run(host, context)
@@ -107,6 +108,7 @@ function stashYarnModule(host, ctx, next) {
 }
 
 function ensureYarnModule(host, ctx, next) {
+    console.log(`step ${ctx.step}: ensureYarnModule`)
     ctx.step += 1
     if ( !ctx.yarn.exists ) {
         try {
@@ -123,8 +125,8 @@ function ensureYarnModule(host, ctx, next) {
 }
 
 function stashPodModule(host, ctx, next) {
-    ctx.step += 1
-    console.log('step 3: Ensure pod npm moduld')
+    console.log(`step ${ctx.step}: stashPodModule`)
+    ctx.step += 1 
     try {
         host.exec('which pod')
         ctx.pod.exists = true
@@ -136,6 +138,7 @@ function stashPodModule(host, ctx, next) {
 }
 
 function ensurePodModule(host, ctx, next) {
+    console.log(`step ${ctx.step}: ensurePodModule`)
     ctx.step += 1
     if ( !ctx.pod.exists ) {
         try {
@@ -152,8 +155,8 @@ function ensurePodModule(host, ctx, next) {
 }
 
 function stashNginx(host, ctx, next) {
-    ctx.step += 1
-    console.log('step 4: Ensure nginx')
+    console.log(`step ${ctx.step}: stashNginx`)
+    ctx.step += 1 
     try {
         host.exec('which nginx')
         ctx.nginx.exists = true
@@ -166,6 +169,7 @@ function stashNginx(host, ctx, next) {
 }
 
 function ensureNginx(host, ctx, next) {
+    console.log(`step ${ctx.step}: ensureNginx`)
     ctx.step += 1
     if ( !ctx.nginx.exists ) {        
         try {
@@ -175,6 +179,52 @@ function ensureNginx(host, ctx, next) {
             ctx.nginx.installed = true
         } catch (err) { 
             ctx.nginx.installed = false
+            return next(err)
+        }
+    } 
+    return next()
+}
+
+function stashMongo(host, ctx, next) {
+    console.log(`step ${ctx.step}: stashMongo`)
+    ctx.step += 1
+    try {
+        host.exec('which mongo')
+        ctx.mongo.exists = true
+    } catch (err) {
+        host.log('mongo not installed')
+        ctx.mongo.exists = false
+    } finally {
+        return next()
+    }
+}
+
+function ensureMongo(host, ctx, next) {
+    console.log(`step ${ctx.step}: ensureMongo`)
+    ctx.step += 1
+    if ( !ctx.mongo.exists ) {        
+        try {
+            // import the key for the official MongoDB repository
+            host.log('add apt key...')
+            host.exec('apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6')
+
+            // add MongoDB repository details to apt
+            const mongourl = "http://repo.mongodb.org/apt/ubuntu/dists/xenial/mongodb-org/3.5"
+            host.exec(`echo "deb [ arch=amd64,arm64 ] ${mongourl} multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.4.list`)
+            host.exec('apt-get update')
+
+            // install themongodb-org meta-package, which includes the daemon, configuration and init scripts
+            host.log('installing mongo from apt...')
+            host.exec('apt-get install -y mongodb-org') 
+
+            // start mongo daemon
+            host.exec('systemctl start mongod')
+            host.exec('systemctl status mongod')
+            host.exec('systemctl enable mongod')
+
+            ctx.mongo.installed = true
+        } catch (err) { 
+            ctx.mongo.installed = false
             return next(err)
         }
     } 
@@ -201,8 +251,11 @@ const run = (host, ctx) => {
     app.use(stashAppPod)
     app.use(ensureAppPod)
 
+    app.use(stashMongo)
+    app.use(ensureMongo)
+
     app.use(function (host, ctx, next) {
-        console.log('======alll done======')
+        console.log('======all done======')
         return next()
     })
 
