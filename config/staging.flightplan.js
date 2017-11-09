@@ -204,13 +204,15 @@ function ensureMongo(host, ctx, next) {
     ctx.step += 1
     if ( !ctx.mongo.exists ) {        
         try {
+            
             // import the key for the official MongoDB repository
             host.log('add apt key...')
-            host.exec('apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6')
+            host.exec('apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10')
 
             // add MongoDB repository details to apt
-            // const mongourl = "http://repo.mongodb.org/apt/ubuntu/dists/xenial/mongodb-org/3.5"
-            // host.exec(`echo "deb [ arch=amd64,arm64 ] ${mongourl} multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.4.list`)
+            const source = "/etc/apt/sources.list.d/mongodb.list"
+            const mongourl = "http://downloads-distro.mongodb.org/repo/ubuntu-upstart"
+            host.exec(`echo "deb [ arch=amd64,arm64 ] ${mongourl} multiverse" | tee tee ${source}`)
             host.exec('apt-get update')
 
             // install themongodb-org meta-package, which includes the daemon, configuration and init scripts
