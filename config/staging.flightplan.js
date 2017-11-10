@@ -204,20 +204,37 @@ function ensureMongo(host, ctx, next) {
     ctx.step += 1
     if ( !ctx.mongo.exists ) {        
         try {
-            
+
             // import the key for the official MongoDB repository
             host.log('add apt key...')
-            host.exec('apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10')
+            host.exec('apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927')
 
             // add MongoDB repository details to apt
-            const source = "/etc/apt/sources.list.d/mongodb.list"
-            const mongourl = "http://downloads-distro.mongodb.org/repo/ubuntu-upstart"
-            host.exec(`echo "deb [ arch=amd64,arm64 ] ${mongourl} multiverse" | tee tee ${source}`)
+            const mongosource = "/etc/apt/sources.list.d/mongodb-org-3.5.list"
+            const mongorepo = "http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse"
+            host.exec(`echo "deb [ arch=amd64,arm64 ] ${mongorepo}" | tee ${mongosource}`)
             host.exec('apt-get update')
 
-            // install themongodb-org meta-package, which includes the daemon, configuration and init scripts
+            // install mongodb-org meta-package 
+            // includes daemon, config and init scripts
             host.log('installing mongo from apt...')
             host.exec('apt-get install -y mongodb-org') 
+
+            // setup start script
+            const configfile = "/etc/systemd/system/mongodb.service"
+            const config = `
+[Unit]
+Description=High-performance, schema-free document-oriented database
+After=network.target
+
+[Service]
+User=mongodb
+ExecStart=/usr/bin/mongod --quiet --config /etc/mongod.conf
+
+[Install]
+WantedBy=multi-user.target
+            `
+            host.exec(`echo "${config}" | tee ${configfile}`)
 
             // start mongo daemon
             host.exec('systemctl start mongod')
@@ -312,3 +329,6 @@ plan.local(function(host) {
 
     // fs.appendFileSync(sshconfigfile, hostconfig)
 })
+
+
+
