@@ -16,6 +16,7 @@
     "babel-preset-backpack": "^0.4.3",
     "chalk": "^2.3.0",
     "console-emoji": "0.0.2",
+    "cpy-cli": "^1.0.1",
     "cross-spawn": "^5.1.0",
     "debug": "^3.1.0",
     "dotenv": "^4.0.0",

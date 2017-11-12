@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 
 var Liftoff = require('liftoff')
   , interpret = require('interpret')
@@ -30,6 +30,22 @@ var shortHands = {
 
 
 var options = nopt(knownOptions, shortHands, process.argv, 2);
+
+const path = require('path')
+const fs = require('fs')
+const configPath = path.resolve('f3.config.js')
+let userConfig = {}
+
+if (fs.existsSync(configPath)) {
+  const userConfigModule = require(configPath)
+  userConfig = userConfigModule.default || userConfigModule
+}
+
+const deployConfig = userConfig.deploy
+
+process.env.host = options.host
+process.env.deployPath = path.resolve(deployConfig.buildDir)
+// console.log('bin/deploy on it', process.env.deployPath )
 
 
 if(options.help) {
@@ -131,5 +147,6 @@ var invoke = function(env) {
 };
 
 cli.launch({
-  configPath: options.flightplan ? options.flightplan : resolve(`deploy/${target}.flightplan`)
+  cwd: process.argv[1].split('node_modules')[0],
+  configPath: options.flightplan ? options.flightplan :  path.resolve(__dirname,'../config/staging.flightplan.js')
 }, invoke);

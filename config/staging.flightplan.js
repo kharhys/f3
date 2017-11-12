@@ -11,9 +11,7 @@ require('dotenv').config({
 
 const argv = require('yargs').argv
 
-const configPath = path.resolve('f3.config.js')
-
-console.log('flightplan on it', configPath)
+console.log('config/flightplan on it', process.env.deployPath )
 
 // configuration
 plan.target('staging', {
@@ -255,23 +253,23 @@ const run = (host, ctx) => {
     var Usey = require('usey')
     var app = Usey()
 
-    app.use(stashNode)
-    app.use(ensureNode)
+    // app.use(stashNode)
+    // app.use(ensureNode)
 
-    app.use(stashYarnModule)
-    app.use(ensureYarnModule)
+    // app.use(stashYarnModule)
+    // app.use(ensureYarnModule)
 
-    app.use(stashPodModule)
-    app.use(ensurePodModule)
+    // app.use(stashPodModule)
+    // app.use(ensurePodModule)
 
-    app.use(stashNginx)
-    app.use(ensureNginx)
+    // app.use(stashNginx)
+    // app.use(ensureNginx)
 
-    app.use(stashAppPod)
-    app.use(ensureAppPod)
+    // app.use(stashAppPod)
+    // app.use(ensureAppPod)
 
-    app.use(stashMongo)
-    app.use(ensureMongo)
+    // app.use(stashMongo)
+    // app.use(ensureMongo)
 
     app.use(function (host, ctx, next) {
         console.log('======all done======')
@@ -313,12 +311,28 @@ Host  staging
 plan.local(function(host) {
     host.log('remote tasks completed successfully')
 
+    const podDir = path.join(process.env.deployPath, '/pods/tendapa')
+    const podRepo = 'ssh://root@165.227.178.113/root/repos/tendapa.git'
+    const res = host.exec(`[ -d ${process.env.deployPath} ] && echo '1' || echo '0'`)
+    const exists = res.code == '1' && String(res.stdout).trim() === '1' ? true : false
+
+
+    if (!exists) {
+        // host.exec(`mkdir ${podDir}`)
+    }
+    
     try {
+        // console.log('process', Object.keys(host) )
+
+        // const spawn = require('cross-spawn')
+        // var child = spawn('ssh-agent', ['sh', '-c', `git clone ${podRepo} ${podDir}`], { stdio: 'inherit' }); 
+        // host.exec(`ssh-agent sh -c 'git clone ${podRepo} ${podDir}'`)
+        host.exec(`git status ${podDir}`)
         host.exec('pwd')
-        host.exec('git status')
-        console.log('gitstatus ')
+        // console.log('git init? ', configPath)
+        // host.exec('git status')
     } catch (err) {
-        console.log('git init? ', configPath)
+        // console.log('git init? ', configPath)
     }
 
     // let sshconfigfile = path.join(userHome, '/.ssh/config')
@@ -329,6 +343,3 @@ plan.local(function(host) {
 
     // fs.appendFileSync(sshconfigfile, hostconfig)
 })
-
-
-
