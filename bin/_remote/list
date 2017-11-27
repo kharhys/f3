@@ -1,0 +1,54 @@
+#! /usr/bin/env node
+
+const path = require('path')
+const fs = require('fs')
+
+const R = require('ramda')
+const log = require('console-emoji')
+const pretty = require('pretty-error')
+
+
+process.on('SIGINT', process.exit)
+
+try {
+
+    const configPath = path.resolve('f3.config.js')
+    let userConfig = {}
+
+    if (fs.existsSync(configPath)) {
+        const userConfigModule = require(configPath)
+        userConfig = userConfigModule.default || userConfigModule
+
+        if (R.path(['deploy', 'server', 'pods'], userConfig)) {
+
+            if (R.type(userConfig.deploy.server.pods) == 'Array') {
+            	const hosts = userConfig.deploy.server.pods.map(it => `<> Host: ${it.host} <> Name: ${it.name} <> SSH User: ${it.user} <>`)
+                log(`
+:sparkles: :dizzy: ${chalk.yellow('list remote hosts to which you can deploy app ')} :hammer: 
+
+	:scroll: ${chalk.white(' Avalable hosts')}
+		${chalk.cyan(Array.from(hosts).join(' '))}
+
+	${chalk.gray(':spiral_note_pad: For more information run f3 remote show <host>')}
+				`)
+                process.exit(0)
+            } else {
+            	log(`${chalk.gray(':spiral_note_pad: Error: invalid config. Ensure deploy.server.pods is an Array of hosts')} `)
+        		process.exit(1)
+            }
+
+        } else {        	
+        	log(`${chalk.gray(':spiral_note_pad: Error: deploy.server.pods is not declared. Run f3 remote init to add a host.')} `)
+    		process.exit(1)
+        }
+
+    } else {
+        log(`${chalk.gray(':spiral_note_pad: Error: f3.config file not found in current directory')} `)
+        process.exit(1)
+    }
+
+} catch (err) {
+    const pe = new pretty()
+    console.log(pe.render(err))
+    process.exit(1)
+}

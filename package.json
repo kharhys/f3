@@ -15,6 +15,7 @@
   "dependencies": {
     "babel-preset-backpack": "^0.4.3",
     "chalk": "^2.3.0",
+    "concurrently": "^3.5.1",
     "console-emoji": "0.0.2",
     "cpy-cli": "^1.0.1",
     "cross-spawn": "^5.1.0",
@@ -41,6 +42,7 @@
     "source-map-support": "^0.5.0",
     "storyboard": "^3.1.1",
     "superb": "^2.0.0",
+    "symlink-dir": "^1.1.0",
     "user-home": "^2.0.0",
     "usey": "^1.7.0",
     "v8flags": "^3.0.1",

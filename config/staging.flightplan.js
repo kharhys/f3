@@ -80,6 +80,8 @@ function ensureNode(host, ctx, next) {
         try {
             host.log('installing node from source...')
             host.exec('curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -')
+            host.exec('apt-get install  -y build-essential') // for node-gyp
+            host.exec('chmod -R u+x /www/') // fix for // semanage port --add --type http_port_t --proto tcp 8080
             host.exec('apt-get install  -y nodejs')
             host.log('Done ensure node');
             ctx.node.installed = true
@@ -202,7 +204,6 @@ function ensureMongo(host, ctx, next) {
     ctx.step += 1
     if ( !ctx.mongo.exists ) {        
         try {
-
             // import the key for the official MongoDB repository
             host.log('add apt key...')
             host.exec('apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927')
@@ -311,8 +312,9 @@ Host  staging
 plan.local(function(host) {
     host.log('remote tasks completed successfully')
 
+    const pkgDir = path.join(process.env.deployPath, '..')
     const podDir = path.join(process.env.deployPath, '/pods/tendapa')
-    const podRepo = 'ssh://root@165.227.178.113/root/repos/tendapa.git'
+    const podRepo = `ssh://root@${process.env.host}/root/repos/tendapa.git`
     const res = host.exec(`[ -d ${process.env.deployPath} ] && echo '1' || echo '0'`)
     const exists = res.code == '1' && String(res.stdout).trim() === '1' ? true : false
 
@@ -328,6 +330,7 @@ plan.local(function(host) {
         // var child = spawn('ssh-agent', ['sh', '-c', `git clone ${podRepo} ${podDir}`], { stdio: 'inherit' }); 
         // host.exec(`ssh-agent sh -c 'git clone ${podRepo} ${podDir}'`)
         host.exec(`git status ${podDir}`)
+        host.exec(`cpy '**/*.*' '!node_modules/' '!dist/' '!releases/' ${podDir} --cwd=${pkgDir} --parents`)
         host.exec('pwd')
         // console.log('git init? ', configPath)
         // host.exec('git status')

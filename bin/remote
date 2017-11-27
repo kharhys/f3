@@ -7,8 +7,8 @@ const pkg = require('../package.json')
 
 const log = require('console-emoji')
 
-const defaultCommand = 'init'
-const commands = new Set([ defaultCommand, 'dev', 'start', 'build', 'build-client',  'build-server', 'remote', 'deploy' ])
+const defaultCommand = 'list'
+const commands = new Set([ defaultCommand, 'add', 'remove', 'show' ])
 
 let cmd = process.argv[2]
 let args
@@ -40,7 +40,7 @@ if (commands.has(cmd)) {
 	args = process.argv.slice(2)
 }
 
-const bin = path.resolve(path.join(__dirname, cmd))
+const bin = path.resolve(path.join(__dirname, '_remote', cmd))
 
 const startProcess = () => {
 	const proc = spawn(bin, args, { 
